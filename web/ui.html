@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+<body style="background-color: transparent !important;">
+    <div class="adminpanel">
+        <div id="ola" class="container-sm text-center">
+            <nav class="navbar">
+                <div class="container-fluid justify-content-start"id="nav">
+                  <a class="navbar-brand" href="#">
+                    <img src="images/fly.png" alt="Logo" width="40" height="44" class="d-inline-block align-text-top">
+                    Fly Vip System V2
+                  </a>
+                  <button class="btn btn-outline-success me-2" type="button">Main button</button>
+                  <button class="btn btn-outline-success me-2" type="button">Main button</button>
+                </div>
+              </nav>
+            <div class="row">
+                  <div class="col-4">
+                      <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                Accordion Item #1
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                              <div class="accordion-body">
+                                      <div class="col-sm">
+                                          <h2 id="title"> Generate a vip</h3>
+                                              <form name="type">
+                                                  <fieldset>
+                                                      <label for="reason" class="form-label">Reason for generating the VIP</label>
+                                                      <input type="text" id="reason" class="form-control" placeholder="tripp bought a vip" onkeyup="checkReason()">
+                                                      <label for="typevip" class="form-label">Choose vip type</label>
+                                                      <select id="typevip" class="form-select"disabled onclick="checkVIP()">
+                                                        <option>Choose...</option>
+                                                        <option>Bronze</option>
+                                                        <option>Silver</option>
+                                                        <option>Gold</option>
+                                                        <option>Diamond</option>
+                                                      </select>
+                                                    <div id="alert"></div>
+                                                    <button type="button" id="generate" class="btn btn-primary" disabled >Generate</button>
+                                                  </fieldset>
+                                                </form>
+                                      </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                Accordion Item #2
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                              <div class="accordion-body">
+                                  <div class="col-sm">
+                                      <h2 id="title"> Generate a vip</h3>
+                                          <form name="type">
+                                              <fieldset>
+                                                  <label for="idplayer" class="form-label">ID Player or Identifier</label>
+                                                  <input type="text" id="idd" class="form-control" placeholder="1 or license:12312323 steam:12312312" onkeyup="checkID()">
+                                                  <label for="typevip2" class="form-label">Choose vip type</label>
+                                                  <select id="typevip2" class="form-select"disabled onclick="checkVIP2()">
+                                                    <option>Choose...</option>
+                                                    <option>Bronze</option>
+                                                    <option>Silver</option>
+                                                    <option>Gold</option>
+                                                    <option>Diamond</option>
+                                                  </select>
+                                                <div id="alert"></div>
+                                                <span id="info"></span>
+                                                  <button type="button" id="givevip" class="btn btn-primary" data-bs-toggle="modal" onclick="Confirm()" data-bs-target="#exampleModal">
+                                                      Give Vip
+                                                  </button>
+                                                  <div id="givevipconfirm" style="display: none;">
+                                                  <button type="button" class="btn btn-success" data-bs-toggle="modal" onclick="Confirm()" data-bs-target="#exampleModal">
+                                                    Give Vip 
+                                                </button>
+                                              </div>
+                                              </fieldset>
+                                            </form>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                  </div>
+                <div class="col-8 table-container">
+                  <h3>sdasdajhasd</h3>
+                  <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+                  <table class="table table-dark table-striped-columns">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Identifier</th>
+                        <th scope="col">Vip Type</th>
+                        <th scope="col">Cars</th>
+                        <th scope="col">Ped</th>
+                        <th scope="col">Money</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+<!-- <html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>flytes</title>
+		<link rel="stylesheet" href="fontawesome/css/all.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="carhud.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		<div class="containerx">
+			<div class="settings">
+				<span class="material-icons close" onclick="exit()">close</span>
+				<p class="header">AJUSTES</p>
+				<section class="option">
+					<p class="option-title">AJUSTES de HUD</p>
+					<div class="options">
+						<div class="option-opt">
+							<label for="placement">Posición del HUD </label>
+							<select name="placement" id="placement" class="cc">
+								<option value="3">Arriba</option>
+								<option value="2">Abajo</option>
+								<option value="1">Derecha</option>
+								<option value="4">Izquierda</option>
+							</select>
+							<label for="color1">Color Vida</label> <input type="color" name="color1" id="color1" class="cc"> 
+							<label for="color2">Color Chaleco A. Balas</label> <input type="color" name="color2" id="color2" class="cc"> 
+							<label for="color3">Color Hambre</label> <input type="color" name="color3" id="color3" class="cc"> 
+							<label for="color4">Color Sed</label> <input type="color" name="color4" id="color4" class="cc"> 
+							<label for="color5">Color Oxígeno</label> <input type="color" name="color5" id="color5" class="cc"> 
+							<label for="color6">Color Microfono</label> <input type="color" name="color6" id="color6" class="cc"> 
+							<button onclick="saveSettings(), exit()" id="saveB">Guardar configuración </button>
+							<button onclick="resetSettings(), exit()" id="resetB">Restablecer configuración</button>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</body>
+	<script src="script.js"></script>
+	<script src="carhud.js"></script>
+</html> -->
