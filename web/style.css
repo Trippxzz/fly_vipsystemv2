@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap');
+@font-face {
+    font-family: BebasNeueRegular;
+    src: url('../html/BebasNeueRegular.ttf');
+}
+
+body {
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box;
+	overflow: hidden !important;
+    /* background: none !important; */
+}
+
+::selection {
+	background: transparent;
+}
+
+.table-container {
+	max-height: 800px;
+	overflow-y: auto;
+  }
+
+.adminpanel {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+}
+ 
+#nav{
+    background-color: gold;
+    color: black;
+}
+.adminpanel {
+	position: absolute;
+	background-color: #110024a6;
+	box-shadow: 0 0 15px #000000;
+	text-shadow: 0 0 20px #000000;
+	width: 1400px;
+	height: 900px;
+	border-radius: 5px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	animation-name: menucfg;
+    animation-duration: 0.7s;  
+    animation-fill-mode: forwards;
+}
+
+
+@media only screen and (max-width: 1921px) {
+	li{
+		height: 56px;
+		width: 56px;
+	}
+	li svg{
+		height: 20.8px;
+		width: 20.8px;
+	}
+}
+@media only screen and (max-width: 1281px) {
+	li{
+		height: 64px;
+		width: 64px;
+	}
+	li svg{
+		height: 24px;
+		width: 24px;
+	}
+    .settings{
+		transform: scale(0.7) translate(-70%, -70%);
+	}
+	.hud{
+		transform: scale(0.7) translateX(70%) translateY(17px);
+	}
+	.hud-collapse{
+		transform: scale(0.7) translateX(70%) translateY(5px);
+	}
+}
+
+@keyframes menucfg {
+    from {top: 65em;}
+    to {top: 47%;}
+}
