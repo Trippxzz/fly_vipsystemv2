@@ -55,10 +55,8 @@ let listVip = []
 window.addEventListener('message', (event) => {
 	if (event.data.type == "open_panel") {
 		$('.adminpanel').fadeIn(300)
-        let vipL = new Vips(event.data.id, event.data.code, event.data.ident, event.data.vip, event.data.car, event.data.ped, event.data.money);
-        listVip.push(vipL);
-        showList()
-	}else if(event.data.action == "updatename"){
+        refresh(event.data.id, event.data.code, event.data.ident, event.data.vip, event.data.car, event.data.ped, event.data.money)
+    }else if(event.data.action == "updatename"){
         msgConfirm(event.data.nameplayer)
     }else if(event.data.type == "hide"){
         closeMain();
@@ -78,7 +76,7 @@ let reason = document.getElementById("reason").value;
 }   
 
 function checkID(){
-    idplayer = document.getElementById("idd").value;
+    idplayer = document.getElementById("idplayerin").value;
     if (idplayer === ''){
         document.getElementById('typevip2').disabled = true;
 	} else { 
@@ -92,21 +90,19 @@ function checkVIP(){
             document.getElementById('generate').disabled = true;
         } else { 
         document.getElementById('generate').disabled = false;
-        document.getElementById('givevip').disabled = false;
         }
 }
 
 function checkVIP2(){
     typevip = document.getElementById("typevip2").value;
        if (typevip === 'Choose...'){
-           document.getElementById('generate').disabled = true;
+           document.getElementById('givevip').disabled = true;
        } else { 
-       document.getElementById('generate').disabled = false;
        document.getElementById('givevip').disabled = false;
        }
 }
 
-function Confirm(){
+function FirstConfirm(){
     $.post('https://fly_vipsystemv2/action', JSON.stringify({
         action: "checkid",
         id: idplayer
@@ -114,30 +110,27 @@ function Confirm(){
     
 }
 
+$(document).on('click', "#givevipconfirm", function() { 
+    var typevip2 = document.getElementById('typevip2').value
+	$.post('https://fly_vipsystemv2/action', JSON.stringify({
+		action: "givevip",
+        tvip2: typevip2,
+        idp: idplayer
+	}));
+    document.getElementById('givevipconfirm').style.display = 'none';
+    document.getElementById('givevip').disabled = true;
+    document.getElementById('idplayerin').value = ''
+    document.getElementById('typevip2').value = 'Choose...'
+    document.getElementById('info').style.display = 'none';
+});
+
+
 function msgConfirm(nameplayer){
+    document.getElementById('info').style.display = 'block';
      document.getElementById('info').innerHTML = 'You will grant a VIP '+typevip+' to the '+nameplayer+' with the id '+idplayer+'.';
      document.getElementById('givevipconfirm').style.display = 'block';
 }
 
-const alertPlaceholder = document.getElementById('alert')
-const appendAlert = (message, type) => {
-  const wrapper = document.createElement('div')
-  wrapper.innerHTML = [
-    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-    `   <div>${message}</div>`,
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    '</div>'
-  ].join('')
-
-  alertPlaceholder.append(wrapper)
-}
-
-const alertTrigger = document.getElementById('generate')
-if (alertTrigger) {
-  alertTrigger.addEventListener('click', () => {
-    appendAlert('Nice, you triggered this alert message!', 'success')
-  })
-}
 
 $(document).on('click', "#generate", function() { 
 	$.post('https://fly_vipsystemv2/action', JSON.stringify({
@@ -158,13 +151,20 @@ $(document).on('click', "#cerrar", function() {
 
 
 
+let refresh = function(id, code, ident, vip, car, ped, money,){
+    let vipL = new Vips(id, code, ident, vip, car, ped, money);
+    listVip.push(vipL);
+    showList()
+}
 
-
-
+function dc(element) {
+    element.style.color = "lightblue";
+  }
+  
 let showList = function () {
-    let act = document.getElementsByClassName("table table-dark table-striped-columns")[0];
+    let act = document.getElementsByClassName("table table-bordered")[0];
     list = "";
-    let ht = "<table table-dark table-striped-columns class='table'>" +
+    let ht = "<table table-bordered class='table'>" +
       "<thead>" +
       "  <tr>" +
       "<th scope='col'>ID</th>" +
@@ -179,16 +179,16 @@ let showList = function () {
       "</table>"
   
     listVip.forEach(p => {
-      list += "<table table-dark table-striped-columns class='table'>" +
+      list += "<table table-bordered class='table'>" +
         "<tbody>" +
         "  <tr class='table-active'>" +
-        " <th scope='row'>" + p.getId + "</th>" +
-        "<td>" + p.getCode + "</td>" +
-        "<td>" + p.getIdentifier + "</td>" +
-        "<td>" + p.getViptype + "</td>" +
-        "<td>" + p.getCars + "</td>" +
-        "<td>" + p.getPed + "</td>" +
-        "<td>" + p.getMoney + "</td>" +
+        " <th scope='row' style='color:white;'>" + p.getId + "</th>" +
+        "<td id = 'cen'>" + p.getCode +"</td>" +
+        "<td style='color:white;'>" + p.getIdentifier + "</td>" +
+        "<td style='color:white;'>" + p.getViptype + "</td>" +
+        "<td style='color:white;'>" + p.getCars + "</td>" +
+        "<td style='color:white;'>" + p.getPed + "</td>" +
+        "<td style='color:white;'>" + p.getMoney + "</td>" +
         "</tr>" +
         "<tr>" +
         "</tbody>" +
@@ -197,3 +197,12 @@ let showList = function () {
     act.innerHTML = (ht) + (list);
   }
   
+var show = false
+  function ShowElement(element){
+    if (show == false){
+        var elementhidden = document.getElementById(element)
+        elementhidden.style.display='block'
+    }else{
+        elementhidden.style.display='none'
+    }
+  }
