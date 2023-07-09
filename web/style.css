@@ -9,7 +9,7 @@ body {
 	padding: 0 !important;
 	box-sizing: border-box;
 	overflow: hidden !important;
-    /* background: none !important; */
+    background: transparent !important;
 }
 
 ::selection {
@@ -17,11 +17,12 @@ body {
 }
 
 .table-container {
-	max-height: 800px;
+	max-height: 725px;
 	overflow-y: auto;
-  }
+	}
 
 .adminpanel {
+	background:linear-gradient(0deg, rgba(255,255,255,0.9051995798319328) 50%, rgba(107,212,214,0.969625350140056) 100%);
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -29,27 +30,112 @@ body {
 	top: 0;
 	display: none;
 }
- 
+
+
+
+#gvip{
+	margin-top:10px;
+	background-color: #277f93 ;
+	color:white;
+	height:350px;
+	padding:15px;
+	border-radius: 5px;
+	box-shadow: 0 0 15px #000000;
+}
+
+#givip{
+	margin-top:15px;
+	background-color: #277f93;
+	color:white;
+	height:350px;
+	padding:15px;
+	border-radius: 5px;
+	box-shadow: 0 0 15px #000000;
+}
+
+#table{
+	background: #277f93;
+	box-shadow: 0 0 15px #000000;
+	color: white;
+	text-shadow: 0 0 20px #000000;
+}
+
+#vippanelbtn{
+	background-color: white;
+	color: black;
+}
+
+#vippanelbtn:hover{
+	/* transition: 0.2s; */
+	box-shadow: 0 0 15px #000000;
+}
+
+#closebtn{
+	margin-left: 4px;
+	border: 1px solid red;
+	color: red;
+}
+
+#closebtn:hover{
+	transition: 1s;
+	background-color: red;
+	color: white;
+}
+
+::-webkit-scrollbar {
+  width: 10px; 
+}
+
+#btncopy{
+	background: transparent;
+	border: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #277f93; 
+  border-radius: 5px; 
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; 
+}
+
 #nav{
-    background-color: gold;
+    /* background-color: gold; */
     color: black;
 }
 .adminpanel {
 	position: absolute;
-	background-color: #110024a6;
+	/* background-color: #110024a6; */
 	box-shadow: 0 0 15px #000000;
 	text-shadow: 0 0 20px #000000;
-	width: 1400px;
-	height: 900px;
+	width: 1350px;
+	height: 850px;
 	border-radius: 5px;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	animation-name: menucfg;
-    animation-duration: 0.7s;  
-    animation-fill-mode: forwards;
+	animation-duration: 0.7s;
+	animation-fill-mode: forwards;
 }
 
+#cen{
+	color: rgba(255, 255, 255, 0);
+}
+#cen:hover{
+	color: white;
+}
+#refresh:hover{
+	cursor: pointer;
+}
+
+#info{
+	display: none;
+	background-color: aqua;
+	color: white;
+}
 
 @media only screen and (max-width: 1921px) {
 	li{
