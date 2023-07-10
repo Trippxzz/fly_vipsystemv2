@@ -41,6 +41,7 @@ class Vips{
 
 function quit() {
 	$('.adminpanel').fadeOut(300);
+    $('.panelnovip').fadeOut(300);
 	$.post('https://fly_vipsystemv2/NUIFocusOff', JSON.stringify({}));
     listVip.splice(0);
 }
@@ -60,6 +61,8 @@ window.addEventListener('message', (event) => {
         msgConfirm(event.data.nameplayer)
     }else if(event.data.type == "hide"){
         closeMain();
+    }else if(event.data.type =="open_novip"){
+        $('.panelnovip').fadeIn(300)
     }
 	
 })
@@ -149,6 +152,11 @@ $(document).on('click', "#cerrar", function() {
 	}));
 });
 
+
+function redirect(){
+    var link = 'https://discord.gg/ZME2MjD8D6'
+    window.invokeNative('openUrl', link)
+}
 
 
 let refresh = function(id, code, ident, vip, car, ped, money,){
