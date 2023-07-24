@@ -2,7 +2,10 @@ var typevip = ''
 var idplayer = ''
 let nameplayer = '' 
 let list = "";
-
+let carsl = "";
+var quantmoney = 0;
+var moneyw = 0;
+var spawnped = false
 class Vips{
     constructor(id, code, identifier, viptype, cars, ped, money){
         this.id = id
@@ -39,13 +42,60 @@ class Vips{
 }
 
 
+class UserVip{
+    constructor(vip, cars, peds, money){
+        this.vip = vip
+        this.cars = cars
+        this.peds = peds
+        this.money = money
+    }
+
+    get getVip(){
+        return this.vip;
+    }
+    get getCars(){
+        return this.cars;
+    }
+    get getPeds(){
+        return this.peds;
+    }
+    get getMoney(){
+        return this.money;
+    }
+}
+
+class Cars{
+    constructor(carmodel, label, imagen){
+        this.carmodel = carmodel
+        this.label = label
+        this.imagen = imagen
+    }
+    get getcarModel(){
+        return this.carmodel;
+    }
+    get getLabel(){
+        return this.label;
+    }
+    get getImagen(){
+        return this.imagen;
+    }
+}
+
 function quit() {
 	$('.adminpanel').fadeOut(300);
     $('.panelnovip').fadeOut(300);
+    $('.panelvip').fadeOut(300);
+    $('.carspanel').fadeOut(300);
 	$.post('https://fly_vipsystemv2/NUIFocusOff', JSON.stringify({}));
     listVip.splice(0);
+    listCars.splice(0);
+    // listpVip.splice(0)
 }
 
+function back(){
+    $('.panelvip').fadeIn(300);
+    $('.carspanel').fadeOut(300);
+}
 document.onkeyup = function (data) {
     if (data.which == 27) {
        quit();
@@ -53,6 +103,8 @@ document.onkeyup = function (data) {
 };
 
 let listVip = []
+let listpVip = []
+let listCars = []
 window.addEventListener('message', (event) => {
 	if (event.data.type == "open_panel") {
 		$('.adminpanel').fadeIn(300)
@@ -63,6 +115,11 @@ window.addEventListener('message', (event) => {
         closeMain();
     }else if(event.data.type =="open_novip"){
         $('.panelnovip').fadeIn(300)
+    }else if(event.data.type == "open_vip"){
+        $('.panelvip').fadeIn(300)
+        rPlayerStats(event.data.vip, event.data.cars, event.data.peds, event.data.moneyx2)
+        let cars = new Cars(event.data.carmodel,event.data.carslabel, event.data.imagen)
+        listCars.push(cars)
     }
 	
 })
@@ -151,8 +208,42 @@ $(document).on('click', "#cerrar", function() {
 		action: "close"
 	}));
 });
+function ClaimMoney(){
+    moneyw = document.getElementById("quantity").value
+    if (quantmoney >= moneyw){
+        $.post('https://fly_vipsystemv2/action', JSON.stringify({
+            action: "withdraw",
+            moneyw: parseInt(moneyw)
+        }));
+    }else{
 
+    }
+}
+function ClaimCar(carclaimed){
+    quit()
+    $.post('https://fly_vipsystemv2/action', JSON.stringify({
+        action: "claimcar",
+        carclaimed: carclaimed
+    }));
+    
+}
 
+// function ModPed(id){
+//     if (id.getPed != "notavailable"){
+//         id.getElementById("valped").disabled = false
+//         document.getElementById("btnconfirmped").innerHTML = " <button type='button' class='btn btn-success' onclick='ChangePed(\"" + id.getIdentifier+ id.getPed + "\")'>H</button>"
+//     }
+// }
+
+function ChangePed(identifier, id){
+    const inputPed = document.getElementById("valped-" + id).value;
+    $.post('https://fly_vipsystemv2/action', JSON.stringify({
+        action: "changeped",
+        ident : identifier,
+        ped: inputPed
+    }));
+    quit()
+}
 function redirect(){
     var link = 'https://discord.gg/ZME2MjD8D6'
     window.invokeNative('openUrl', link)
@@ -165,9 +256,71 @@ let refresh = function(id, code, ident, vip, car, ped, money,){
     showList()
 }
 
-function dc(element) {
-    element.style.color = "lightblue";
-  }
+let rPlayerStats = function(vip, car, ped, money){
+    let playervip = new UserVip(vip, car, ped, money)
+    listpVip.push(playervip)
+
+    let cantcars = document.getElementById("cantcars").innerHTML = car 
+    if (cantcars === 0){
+        document.getElementById("cantcars").style.color = "red";
+        document.getElementById("btncar").disabled = true
+    }else{
+        document.getElementById("cantcars").style.color = "rgb(9, 230, 9);";
+        document.getElementById("btncar").disabled = false
+    }
+
+
+    let cantmoney =  document.getElementById("cantmoney").innerHTML = money 
+    document.getElementById("quantity").max = money
+    if (cantmoney === 0){
+        document.getElementById("btnmoney").disabled = true
+    }else{
+        quantmoney = money
+        document.getElementById("btnmoney").disabled = false
+    }
+    if (ped != 'notavailable' || ped!= '1'){
+        document.getElementById("ped").innerHTML = ped
+        document.getElementById("btnped").disabled = false
+    }else{
+        document.getElementById("btnped").disabled = true
+    }
+}
+
+function SpawnPed(){
+    btntext = document.getElementById("contpedbtn").textContent
+    if (spawnped === false && btntext == "Spawn"){
+        spawnped = true
+        document.getElementById("contpedbtn").innerHTML = "Reset Skin"
+        $.post('https://fly_vipsystemv2/action', JSON.stringify({
+            action: "spawnped",
+            playerped: document.getElementById("ped").textContent
+        }));
+    }else{
+        spawnped = false
+        document.getElementById("contpedbtn").innerHTML = "Spawn Ped"
+        $.post('https://fly_vipsystemv2/action', JSON.stringify({
+            action: "resetskin"
+        }));
+    }
+}
+function ChooseCars(){
+    let cards = document.getElementsByClassName("cardscars")[0];
+    $('.carspanel').fadeIn(300);
+    $('.panelvip').fadeOut(300);
+    carsl = "";
+    listCars.forEach(c =>{
+        carsl +=  
+        "<div class='card' id='carscards' style='width: 18rem;'>"+
+        "<img src="+c.getImagen+" class='card-img-top' alt='...'>"+
+        "<div class='card-body'>"+
+           " <h5 class='card-title d-flex justify-content-center' style='color:white'>"+c.getLabel+"</h5>"+
+         "   <a  class='btn d-flex justify-content-center' id='btnclaim' onclick='ClaimCar(\"" + c.getcarModel + "\")'>Claim</a>"+
+       " </div>"+
+        "</div>"
+    });
+    cards.innerHTML = (carsl)
+}
+
   
 let showList = function () {
     let act = document.getElementsByClassName("table table-bordered")[0];
@@ -186,31 +339,42 @@ let showList = function () {
       "</thead>" +
       "</table>"
   
-    listVip.forEach(p => {
-      list += "<table table-bordered class='table'>" +
-        "<tbody>" +
-        "  <tr class='table-active'>" +
-        " <th scope='row' style='color:white;'>" + p.getId + "</th>" +
-        "<td id = 'cen'>" + p.getCode +"</td>" +
-        "<td style='color:white;'>" + p.getIdentifier + "</td>" +
-        "<td style='color:white;'>" + p.getViptype + "</td>" +
-        "<td style='color:white;'>" + p.getCars + "</td>" +
-        "<td style='color:white;'>" + p.getPed + "</td>" +
-        "<td style='color:white;'>" + p.getMoney + "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "</tbody>" +
-        "</table>"
-    });
-    act.innerHTML = (ht) + (list);
-  }
-  
-var show = false
-  function ShowElement(element){
-    if (show == false){
-        var elementhidden = document.getElementById(element)
-        elementhidden.style.display='block'
-    }else{
-        elementhidden.style.display='none'
+      listVip.forEach(p => {
+        list += "<table table-bordered class='table'>" +
+          "<tbody>" +
+          "  <tr class='table-active'>" +
+          " <th scope='row' style='color:white;'>" + p.getId + "</th>" +
+          "<td id = 'cen'>" + p.getCode +"</td>" +
+          "<td style='color:white;'>" + p.getIdentifier + "</td>" +
+          "<td style='color:white;'>" + p.getViptype + "</td>" +
+          "<td style='color:white;'>" + p.getCars + "</td>" +
+          "<td style='color:white;'>" +
+          "<div class='input-container'>" +
+          "<input type='text' style='width:80%;' id='valped-" + p.getId + "' disabled class='form-control' value='" + p.getPed + "'>" +
+          "<a id='modped-" + p.getId + "' onclick='ModPed(" + p.getId + ")' class='btn bi bi-pencil-square'></a>" +
+          "</div>" +
+          "<span id='btnconfirmped-" + p.getId + "'></span>" +
+          "</td>" +
+          "<td style='color:white;'>" + p.getMoney + "</td>" +
+          "</tr>" +
+          "<tr>" +
+          "</tbody>" +
+          "</table>"
+      });
+      
+      act.innerHTML = (ht) + (list);
+      
     }
-  }
+  
+    function ModPed(id){
+        console.log(id)
+        const inputPed = document.getElementById("valped-" + id);
+        const btnConfirmPed = document.getElementById("btnconfirmped-" + id);
+        const currentPed = inputPed.value;
+        if (currentPed !== "notavailable"){
+            let search = listVip.find(v => v.getId == id)
+            // console.log(search.getIdentifier)
+            inputPed.disabled = false;
+            btnConfirmPed.innerHTML = ` <button type='button' class='btn btn-success' onclick='ChangePed("${search.getIdentifier}", "${id}")'>Confirm</button>`;
+        }
+    }
