@@ -84,6 +84,7 @@
                   <th scope="col">Cars</th>
                   <th scope="col">Ped</th>
                   <th scope="col">Money</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
             </table>
@@ -91,18 +92,42 @@
       </div>
     </div>
   </div>
+
+
   <div class="panelnovip">
     <div class="container-sm text-center">
       <div class="col d-flex justify-content-end"><button class="btn" id="closebtn" type="button" onclick="quit()" style="margin-top: 10px;"><i class="bi bi-x-lg"></i></button></div>
-        <div id="msg">
+      <div class="row">
+        <div class="col-6" id="msg">
           <h1 id="fmsg">You do not have access to this VIP panel</h1>
-          <h3 id="littlemsg">But you can access by clicking this big button</h3>
+          <!-- <h3 id="littlemsg">But you can access by clicking this big button</h3> -->
+          <div class="text-center">
+            <div class="position-relative">
+              <img src="https://cdn.discordapp.com/attachments/935735587598635028/1133146190742032455/trevor_phillips_render_by_squizcat_d5m9777-fullview.png" id="imgbuy" class="rounded" alt="...">
+              <div class="col position-absolute top-60 start-50 translate-middle-x align-self-end" style="margin-top: -100px;">
+                <button class="btn" id="btnvip" onclick="redirect()">Click here to become a VIP!</button>
+                </div>
+            </div>
+          </div>    
         </div>
-        <div class="col">
-          <button class="btn" id="btnvip" onclick="redirect()">Click here to become a VIP!</button>
+        <div class="col" id="redeemvip">
+          <h1 id="fmsg">Redeem your vip code</h1>
+          <div class="text-center">
+            <div class="position-relative">
+              <img src="https://media.discordapp.net/attachments/935735587598635028/1133145800554336359/debicy1-759c85b5-0a84-4bf9-82c5-5648739a13bf.png?width=420&height=675" id="imgredeem" class="rounded" alt="...">
+              <div class="position-absolute top-60 start-50 translate-middle-x align-self-end" style="margin-top: -50px; display: flex; align-items: center;">
+                <input type="text" id="code" placeholder="YOUR CODE" style="margin-right: 10px;">
+                <button class="btn bi bi-send" id="btnredeem" onclick="SpawnPed()"></button>
+            </div>
+                      
+          </div>
+          </div>   
         </div>
+      </div>
     </div>
   </div>
+
+
   <div class="panelvip">
     <div class="container text-center">
       <div class="col d-flex justify-content-end"><button class="btn" id="closebtn" type="button" onclick="quit()" style="margin-top: 10px;"><i class="bi bi-x-lg"></i></button></div>
