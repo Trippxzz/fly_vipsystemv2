@@ -335,6 +335,7 @@ let showList = function () {
       "<th scope='col'>Cars</th>" +
       "<th scope='col'>Ped</th>" +
       "<th scope='col'>Money</th>" +
+      "<th scope='col'>Actions</th>" +
       "</tr>" +
       "</thead>" +
       "</table>"
@@ -349,13 +350,11 @@ let showList = function () {
           "<td style='color:white;'>" + p.getViptype + "</td>" +
           "<td style='color:white;'>" + p.getCars + "</td>" +
           "<td style='color:white;'>" +
-          "<div class='input-container'>" +
-          "<input type='text' style='width:80%;' id='valped-" + p.getId + "' disabled class='form-control' value='" + p.getPed + "'>" +
-          "<a id='modped-" + p.getId + "' onclick='ModPed(" + p.getId + ")' class='btn bi bi-pencil-square'></a>" +
-          "</div>" +
+          "<div class='input-container'>" +"<input type='text' style='width:80%;' id='valped-" + p.getId + "' disabled class='form-control' value='" + p.getPed + "'>" +"<a id='modped-" + p.getId + "' onclick='ModPed(" + p.getId + ")' class='btn bi bi-pencil-square'></a>" +"</div>" +
           "<span id='btnconfirmped-" + p.getId + "'></span>" +
           "</td>" +
           "<td style='color:white;'>" + p.getMoney + "</td>" +
+          "<td style='color:white;'>" + "<a id='del' onclick='DeleteVip(" + p.getId + ")' class='btn bi bi-trash'></a>" +  "<span id='confirmdel-"+p.getId+"'></span>"+"</td>" 
           "</tr>" +
           "<tr>" +
           "</tbody>" +
@@ -366,15 +365,28 @@ let showList = function () {
       
     }
   
+
     function ModPed(id){
         console.log(id)
-        const inputPed = document.getElementById("valped-" + id);
-        const btnConfirmPed = document.getElementById("btnconfirmped-" + id);
-        const currentPed = inputPed.value;
-        if (currentPed !== "notavailable"){
+        const inputped = document.getElementById("valped-" + id);
+        const btnconfirmped = document.getElementById("btnconfirmped-" + id);
+        if (inputped.value !== "notavailable"){
             let search = listVip.find(v => v.getId == id)
             // console.log(search.getIdentifier)
-            inputPed.disabled = false;
-            btnConfirmPed.innerHTML = ` <button type='button' class='btn btn-success' onclick='ChangePed("${search.getIdentifier}", "${id}")'>Confirm</button>`;
+            inputped.disabled = false;
+            btnconfirmped.innerHTML = ` <button type='button' class='btn btn-success' onclick='ChangePed("${search.getIdentifier}", "${id}")'>Confirm</button>`;
         }
+    }
+
+
+    function DeleteVip(id){
+        document.getElementById("confirmdel-"+id).innerHTML = ` <button type='button'  class='btn bi bi-check' onclick='ConfirmDel("${id}")'></button>`
+    }
+
+    function ConfirmDel(id){
+        $.post('https://fly_vipsystemv2/action', JSON.stringify({
+            action: "delvip",
+            idvip:id
+        }));
+        quit()
     }
