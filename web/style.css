@@ -167,32 +167,46 @@ body {
 }
 
 #msg{
-	margin: 100px;
+	margin-top: 60px;
 	background: #277f93;
 	box-shadow: 0 0 15px #000000;
 	color: white;
-	padding: 100px;
-	top: 50%;
+	/* padding: 80px; */
 	border-radius: 10px;
 	text-shadow: 0 0 20px #000000;
+	height: 600px;
 }
 
 #fmsg{
+	margin-top: 20px;
 	font-size: 2.9rem;
 }
 #littlemsg{
-	margin-top: 30px;
+	margin-top: 75px;
+}
+
+#redeemvip{
+	margin-top: 60px;
+	background: #277f93;
+	box-shadow: 0 0 15px #000000;
+	color: white;
+	/* padding: 80px; */
+	border-radius: 10px;
+	text-shadow: 0 0 20px #000000;
+	height: 600px;
+	margin-left: 40px;
 }
 
 #btnvip{
 	height: 80px;
-	width: 600px;
+	width: 500px;
 	color: white;
 	background-color: #277f93;
 	box-shadow: 0 0 15px #000000;
 	text-shadow: 0 0 20px #000000;
 	font-size: 2rem;
 	transition:0.3s;
+	margin-top: -40px;
 }
 
 #btnvip:hover{
@@ -328,6 +342,16 @@ body {
 	filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.89));
 }
 
+#imgredeem{
+	max-height: 485px;
+	filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.89));
+}
+
+#imgbuy{
+	margin-left: -80px;
+	max-height: 485px;
+	filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.89));
+}
 
 .input-container {
 	display: flex;
@@ -340,34 +364,32 @@ body {
   }
 
 
+#code{
+	font-size: 30px;
+	text-align: center;
+	margin-left: 80px;
+	width: 300px;
+	height: 50px;
+	border: 0px;
+	box-shadow: 0 0 20px #000000d0;
+}
 
-@media only screen and (max-width: 1921px) {
-	li{
-		height: 56px;
-		width: 56px;
-	}
-	li svg{
-		height: 20.8px;
-		width: 20.8px;
+#btnredeem{
+	background-color: rgba(100, 100, 180, 0.986);
+	height: 50px;
+	width: 50px;
+	box-shadow: 0 0 20px #000000d0;
+}
+
+@media only screen and (max-width: 1681px) {
+    .adminpanel , .panelnovip, .panelvip, .carspanel{
+		transform: scale(1) translate(-50%, -50%);
 	}
 }
-@media only screen and (max-width: 1281px) {
-	li{
-		height: 64px;
-		width: 64px;
-	}
-	li svg{
-		height: 24px;
-		width: 24px;
-	}
-    .settings{
+
+@media only screen and (max-width: 1400px) {
+    .adminpanel , .panelnovip, .panelvip, .carspanel{
 		transform: scale(0.7) translate(-70%, -70%);
-	}
-	.hud{
-		transform: scale(0.7) translateX(70%) translateY(17px);
-	}
-	.hud-collapse{
-		transform: scale(0.7) translateX(70%) translateY(5px);
 	}
 }
 
