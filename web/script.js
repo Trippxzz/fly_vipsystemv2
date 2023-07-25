@@ -279,7 +279,7 @@ let rPlayerStats = function(vip, car, ped, money){
         quantmoney = money
         document.getElementById("btnmoney").disabled = false
     }
-    if (ped != 'notavailable' || ped!= '1'){
+    if (ped != 'notavailable' || ped != "1"){
         document.getElementById("ped").innerHTML = ped
         document.getElementById("btnped").disabled = false
     }else{
