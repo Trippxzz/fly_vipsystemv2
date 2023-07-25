@@ -257,6 +257,7 @@ let refresh = function(id, code, ident, vip, car, ped, money,){
 }
 
 let rPlayerStats = function(vip, car, ped, money){
+    console.log("si")
     let playervip = new UserVip(vip, car, ped, money)
     listpVip.push(playervip)
 
@@ -387,6 +388,15 @@ let showList = function () {
         $.post('https://fly_vipsystemv2/action', JSON.stringify({
             action: "delvip",
             idvip:id
+        }));
+        quit()
+    }
+
+    function RedeemCode(){
+       
+        $.post('https://fly_vipsystemv2/action', JSON.stringify({
+            action: "redeemvip",
+            code:document.getElementById("code").value
         }));
         quit()
     }
