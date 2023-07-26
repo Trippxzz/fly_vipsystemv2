@@ -142,7 +142,7 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	animation-name: menucfg;
+	animation-name: anim;
 	animation-duration: 0.7s;
 	animation-fill-mode: forwards;
 }
@@ -150,6 +150,7 @@ body {
 
 #cen{
 	color: rgba(255, 255, 255, 0);
+	font-size:13px;
 }
 #cen:hover{
 	color: white;
@@ -383,7 +384,7 @@ body {
 
 @media only screen and (max-width: 1681px) {
     .adminpanel , .panelnovip, .panelvip, .carspanel{
-		transform: scale(1) translate(-50%, -50%);
+		transform: scale(0.9) translate(-50%, -50%);
 	}
 }
 
@@ -391,9 +392,12 @@ body {
     .adminpanel , .panelnovip, .panelvip, .carspanel{
 		transform: scale(0.7) translate(-70%, -70%);
 	}
+	#imgcar{
+		margin-top:-100px;
+		transform: scale(0.8);
+	}
 }
-
-@keyframes menucfg {
+@keyframes anim {
     from {top: 65em;}
     to {top: 47%;}
 }
