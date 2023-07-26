@@ -36,10 +36,10 @@
                 <label for="typevip" class="form-label">Choose vip type</label>
                 <select id="typevip" class="form-select" disabled onclick="checkVIP()">
                   <option>Choose...</option>
-                  <option>Bronze</option>
+                  <!-- <option>Bronze</option>
                   <option>Silver</option>
                   <option>Gold</option>
-                  <option>Diamond</option>
+                  <option>Diamond</option> -->
                 </select>
                 <button type="button" id="generate" class="btn" disabled>Generate</button>
               </fieldset>
@@ -54,10 +54,10 @@
                 <label for="typevip2" class="form-label">Choose vip type</label>
                 <select id="typevip2" class="form-select" disabled onclick="checkVIP2()">
                   <option>Choose...</option>
-                  <option>Bronze</option>
+                  <!-- <option>Bronze</option>
                   <option>Silver</option>
                   <option>Gold</option>
-                  <option>Diamond</option>
+                  <option>Diamond</option> -->
                 </select>
                 <span id="info"></span>
                 <button type="button" id="givevip" class="btn" onclick="FirstConfirm()"  disabled>
@@ -73,7 +73,8 @@
           </div>
         </div>
         <div class="col-9 table-container">
-          <div class="col-sm-auto"><h2>VIP List</h2></div>
+          <div class="col-sm-auto"><h2>VIP List <a class="bi bi-eye" onclick="ShowList()"></a></h2></div>
+          <div id="list" style="display: none;">
             <table class="table table-bordered" id="table">
               <thead>
                 <tr>
@@ -88,6 +89,7 @@
                 </tr>
               </thead>
             </table>
+          </div>
         </div>
       </div>
     </div>
@@ -189,7 +191,7 @@
               <img src="https://cdn.discordapp.com/attachments/935735587598635028/1132782014211309568/ped.png" id="imgped" class="rounded" alt="...">
               <div class="col position-absolute top-60 start-50 translate-middle-x align-self-end" style="margin-top: -100px;">
                 <span id="ped">Hasbulla</span>
-                 <button class="btn" id="btnped" onclick="SpawnPed()"> <span id="contpedbtn">Spawn</span></button>
+                 <button class="btn" id="btnped" onclick="SpawnPed()" disabled> <span id="contpedbtn">Spawn</span></button>
                 </div>
             </div>
           </div>    
