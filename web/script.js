@@ -6,7 +6,17 @@ let carsl = "";
 var quantmoney = 0;
 var moneyw = 0;
 var spawnped = false
-class Vips{
+
+class TypeVips{
+    constructor(name){
+        this.name = name
+    }
+    get getName(){
+        return this.name
+    }
+}
+
+class InfoVips{
     constructor(id, code, identifier, viptype, cars, ped, money){
         this.id = id
         this.code = code
@@ -89,6 +99,7 @@ function quit() {
 	$.post('https://fly_vipsystemv2/NUIFocusOff', JSON.stringify({}));
     listVip.splice(0);
     listCars.splice(0);
+    listTypeV.splice(0);
     // listpVip.splice(0)
 }
 
@@ -101,13 +112,28 @@ document.onkeyup = function (data) {
        quit();
     }
 };
-
+let listTypeV = []
 let listVip = []
 let listpVip = []
 let listCars = []
 window.addEventListener('message', (event) => {
 	if (event.data.type == "open_panel") {
 		$('.adminpanel').fadeIn(300)
+       let TVip = new TypeVips(event.data.viptypes)
+       listTypeV.push(TVip)
+        document.getElementById('info').style.display = 'none';
+        document.getElementById('givevipconfirm').style.display = 'none';
+
+        let viplist = document.getElementById("typevip") 
+        viplist.innerHTML = ""; 
+        listTypeV.forEach(v => {
+            let option = document.createElement("option");
+            option.value = v.getName;
+            option.text = v.getName;
+            viplist.appendChild(option);
+          });
+    document.getElementById("list").style.display = "none"
+    }else if(event.data.type == "show_list"){
         refresh(event.data.id, event.data.code, event.data.ident, event.data.vip, event.data.car, event.data.ped, event.data.money)
     }else if(event.data.action == "updatename"){
         msgConfirm(event.data.nameplayer)
@@ -235,11 +261,11 @@ function ClaimCar(carclaimed){
 //     }
 // }
 
-function ChangePed(identifier, id){
+function ChangePed(id){
     const inputPed = document.getElementById("valped-" + id).value;
     $.post('https://fly_vipsystemv2/action', JSON.stringify({
         action: "changeped",
-        ident : identifier,
+        id : id,
         ped: inputPed
     }));
     quit()
@@ -249,15 +275,18 @@ function redirect(){
     window.invokeNative('openUrl', link)
 }
 
-
-let refresh = function(id, code, ident, vip, car, ped, money,){
-    let vipL = new Vips(id, code, ident, vip, car, ped, money);
+function ShowList(){
+    $.post('https://fly_vipsystemv2/action', JSON.stringify({
+        action: "showlist"
+    }));
+}
+let refresh = function(id, code, ident, vip, car, ped, money){
+    let vipL = new InfoVips(id, code, ident, vip, car, ped, money);
     listVip.push(vipL);
     showList()
 }
 
 let rPlayerStats = function(vip, car, ped, money){
-    console.log("si")
     let playervip = new UserVip(vip, car, ped, money)
     listpVip.push(playervip)
 
@@ -279,11 +308,12 @@ let rPlayerStats = function(vip, car, ped, money){
         quantmoney = money
         document.getElementById("btnmoney").disabled = false
     }
-    if (ped != 'notavailable' || ped != "1"){
+    if (ped === 'notavailable' || ped === "1"){
+        document.getElementById("ped").innerHTML = ped
+        document.getElementById("btnped").disabled = true
+    }else{
         document.getElementById("ped").innerHTML = ped
         document.getElementById("btnped").disabled = false
-    }else{
-        document.getElementById("btnped").disabled = true
     }
 }
 
@@ -324,6 +354,8 @@ function ChooseCars(){
 
   
 let showList = function () {
+
+    document.getElementById("list").style.display = 'block'
     let act = document.getElementsByClassName("table table-bordered")[0];
     list = "";
     let ht = "<table table-bordered class='table'>" +
@@ -346,8 +378,8 @@ let showList = function () {
           "<tbody>" +
           "  <tr class='table-active'>" +
           " <th scope='row' style='color:white;'>" + p.getId + "</th>" +
-          "<td id = 'cen'>" + p.getCode +"</td>" +
-          "<td style='color:white;'>" + p.getIdentifier + "</td>" +
+          "<td  id = 'cen'>" + p.getCode +"</td>" +
+          "<td style='color:white; font-size:13px;'>" + p.getIdentifier + "</td>" +
           "<td style='color:white;'>" + p.getViptype + "</td>" +
           "<td style='color:white;'>" + p.getCars + "</td>" +
           "<td style='color:white;'>" +
@@ -368,14 +400,12 @@ let showList = function () {
   
 
     function ModPed(id){
-        console.log(id)
         const inputped = document.getElementById("valped-" + id);
         const btnconfirmped = document.getElementById("btnconfirmped-" + id);
         if (inputped.value !== "notavailable"){
             let search = listVip.find(v => v.getId == id)
-            // console.log(search.getIdentifier)
             inputped.disabled = false;
-            btnconfirmped.innerHTML = ` <button type='button' class='btn btn-success' onclick='ChangePed("${search.getIdentifier}", "${id}")'>Confirm</button>`;
+            btnconfirmped.innerHTML = ` <button type='button' class='btn btn-success' onclick='ChangePed("${id}")'>Confirm</button>`;
         }
     }
 
