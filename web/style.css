@@ -74,16 +74,6 @@ body {
 	text-shadow: 0 0 20px #000000;
 }
 
-#vippanelbtn{
-	background-color: white;
-	color: black;
-}
-
-#vippanelbtn:hover{
-	/* transition: 0.2s; */
-	box-shadow: 0 0 15px #000000;
-}
-
 #closebtn{
 	margin-left: 4px;
 	border: 1px solid red;
@@ -380,6 +370,15 @@ body {
 	height: 50px;
 	width: 50px;
 	box-shadow: 0 0 20px #000000d0;
+}
+
+#eye{
+	margin-top: 6px;
+	background-color: #5555559a;
+	padding: 1px;
+	border-radius: 4px;
+	box-shadow: 0 0 14px #000000d0;
+	color: white;
 }
 
 @media only screen and (max-width: 1681px) {
