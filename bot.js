@@ -1,0 +1,149 @@
+const {Discord, Collection, Client, MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, Message} = require('discord.js');
+const client = new Client({
+     intents: [
+         "GUILDS",
+         "GUILD_MEMBERS",
+         "GUILD_BANS",
+         "GUILD_INTEGRATIONS",
+         "GUILD_WEBHOOKS",
+         "GUILD_INVITES",
+         "GUILD_VOICE_STATES",
+         "GUILD_PRESENCES",
+         "GUILD_MESSAGES",
+         "GUILD_MESSAGE_REACTIONS",
+         "GUILD_MESSAGE_TYPING",
+         "DIRECT_MESSAGES",
+         "DIRECT_MESSAGE_REACTIONS",
+         "DIRECT_MESSAGE_TYPING",
+     ],
+ });
+ 
+ //EXPORTS CLIENT
+ module.exports = client;
+var id, ped, car, money;
+const config = require('./config.json');
+let CurrentChannel = false;
+client.on('ready', () => {
+     console.log('^5 [Fly] ^2BOT Ready^0')
+    //  client.user.setActivity("Working in bot for vip system v2");
+})
+var msg = null
+client.on('messageCreate', async (message, interaction) => {
+    CurrentChannel = message.channel;
+    const args = message.content.substring().split(" ");
+     if (message.author.bot) return;
+    if (message.content.startsWith(config.prefix)) {
+
+        if (args[0] == config.prefix + 'generate') {
+          if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply(`${message.author} **You do not have permissions to use this command.**`); 
+            return exports['fly_vipsystemv2'].GetVipInfo("g");
+    }
+
+    if (args[0] == config.prefix + 'givevip') {
+      if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply(`${message.author} **You do not have permissions to use this command.**`); 
+        if (args[1]) {
+          return exports['fly_vipsystemv2'].GetVipInfo(args[1]);
+          }
+        else {
+      const embedfail = new MessageEmbed()
+          .setTitle('You must put an ID or a rockstar license.')
+          .setColor('RED')
+
+          message.channel.send({embeds: [embedfail]})
+      }
+  }
+  
+  if (args[0] == config.prefix + 'removevip') {
+    if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply(`${message.author} **You do not have permissions to use this command.**`); 
+    if (args[1]) {
+      return exports['fly_vipsystemv2'].Removevip(args[1]);
+  }
+               else {
+  const embedfail = new MessageEmbed()
+      .setTitle('You must put an ID or a rockstar license.')
+      .setColor('RED')
+
+      message.channel.send({embeds: [embedfail]})
+  }
+}
+
+if (args[0] == config.prefix + 'vips') {
+  if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply(`${message.author} **You do not have permissions to use this command.**`); 
+      return exports['fly_vipsystemv2'].SearchVip();
+}
+
+if (args[0] == config.prefix + 'setped') {
+  if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply(`${message.author} **You do not have permissions to use this command.**`); 
+  if (args[2]) {
+    return exports['fly_vipsystemv2'].SetPed(args[1], args[2]);
+}
+  else {
+const embedfail = new MessageEmbed()
+    .setTitle('You must put an ID or a rockstar license or you have not entered the ped code.')
+    .setColor('RED')
+    message.channel.send({embeds: [embedfail]})
+  }}
+
+ }})
+
+
+
+RegisterNetEvent('fly_vipsystemv2:SendEmbed')
+on('fly_vipsystemv2:SendEmbed', embed => SendEmbed(embed));
+ 
+ SendEmbed = (embed) => {
+      const CreateEmbed = new MessageEmbed()
+      .setTitle(embed.title)
+      .setColor(embed.color) 
+      .setDescription(embed.description)
+      
+      if (embed.fields) {
+           for (x in embed.fields) CreateEmbed.addField(embed.fields[x].name, embed.fields[x].value, embed.fields[x].inline || false);
+      }
+    //   return CreateEmbed
+      CurrentChannel.send({embeds: [CreateEmbed]})
+    }
+
+RegisterNetEvent('fly_vipsystemv2:SendInfo')
+on('fly_vipsystemv2:SendInfo', info => SendInfo(info));
+SendInfo = async (info) => {
+      const CreateEmbed = new MessageEmbed()
+      .setTitle("Select the type of vip")
+      .setColor("GOLD") 
+
+      const Vipscat = new MessageActionRow()
+      .addComponents(
+        new MessageSelectMenu()
+        .setCustomId('typevip')
+       .setPlaceholder('Select it here'))
+       if (info.options) {
+        for (const option of info.options) {
+          Vipscat.components[0].addOptions({
+            label: option.label,
+            value: option.value,
+            emoji: option.emoji,
+          });
+
+          id = option.id
+        }
+
+      }
+      const m = await CurrentChannel.send({embeds: [CreateEmbed], components: [Vipscat]})
+      
+            const ifilter = i => i.user.id;
+            const collector = m.createMessageComponentCollector({filter: ifilter, time: 60000})
+            collector.on("collect", async i => {
+                await i.deferUpdate()
+                if (id == "g"){
+                const embed = new MessageEmbed()
+                .setTitle('VIP Code Generated')
+                .setDescription(`VIP  \`${i.values[0]}\` generated by ${i.user}`)
+                .setColor('GOLD')
+                CurrentChannel.send({embeds: [embed]})
+                return exports['fly_vipsystemv2'].GenerateCode(i.values[0]);
+            }else{
+              return exports['fly_vipsystemv2'].GiveVip(id, i.values[0]);
+            }})}
+
+
+client.login(config.token).catch(e => client.logger.error(e.message));
