@@ -9,16 +9,27 @@ RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
 	PlayerData.job = job
 end)
-
-local idplayer, rname, type, vips, car, ped, money, useped = 'N/A', 'N/A', 'N/A', 'N/A', nil, nil, nil, false
-local open = false
+local IsDead = false
 
 RegisterNetEvent('open:panel')
-AddEventHandler('open:panel', function(id, code, ident, vip, car, ped,money)    
-    open = true
+AddEventHandler('open:panel', function()    
+   if not IsDead then
+    for k,v in pairs(Config.Vips) do
     SetNuiFocus(true, true)
     SendNUIMessage({
         type = "open_panel",
+         viptypes = v.Name
+    })
+        end
+    end
+end)
+
+RegisterNetEvent('show:list')
+AddEventHandler('show:list', function(id, code, ident, vip, car, ped,money)    
+
+    SetNuiFocus(true, true)
+    SendNUIMessage({
+        type = "show_list",
         id = id,
          code = code, 
          ident = ident, 
@@ -27,37 +38,20 @@ AddEventHandler('open:panel', function(id, code, ident, vip, car, ped,money)
          ped = ped,
          money = money
     })
+
 end)
 
-function PlayerPanel(player)
-    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'playerpanel', {
-        title = 'Player management',
-        align = 'right',
-        elements = {
-            {label = 'Set Ped', value = 'setped'},
-            {label = 'Remove VIP', value = 'removevip'},
-            {label = '<span style = color:red; span>Close</span>', value = 'close'}
-        }}, function(data, menu)
-            local action = data.current.value 
-            if action == 'setped' then
-                ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'ped', {
-                    title = 'Name PED'
-                    }, function(data2, menu2)
-                         haskeyped = data2.value
-                         	menu2.close()
-                            TriggerServerEvent('fly:setped', player, haskeyped)
-                        end, function(data, menu)
-                      menu.close()
-                end)
-            elseif action == 'removevip' then
-                RemoveVIP(player)
-            elseif action == 'close' then
-                ESX.UI.Menu.CloseAll()
-            end
-        end, function(data, menu)
-            menu.close()
-    end)
-end
+
+RegisterNetEvent('panelnovip')
+AddEventHandler('panelnovip', function()    
+    if not IsDead then
+    SetNuiFocus(true, true)
+    SendNUIMessage({
+        type="open_novip"
+    })
+    end
+end)
+
 
 RegisterNetEvent('fly:confirmid')
 AddEventHandler('fly:confirmid', function(idplayerconfirm, nameplayer)
@@ -66,110 +60,8 @@ AddEventHandler('fly:confirmid', function(idplayerconfirm, nameplayer)
         nameplayer = nameplayer
     })
 end)
-function GivePanel()
-    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'givepanel', {
-        title = 'VIP Admin Menu',
-        align = 'right',
-        elements = {
-            {label = 'ID: '..idplayer, value = 'id'},
-            {label = 'Name: '..rname, value = nil},
-            {label = 'Type: '..type, value = 'type'},
-            {label = 'Confirm', value = 'confirm'}, 
-            {label = '<span style = color:red; span>Close</span>', value = 'close'}
-        }}, function(data, menu)
-            local action = data.current.value 
-            if action == 'id' then
-                ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'tag', {
-                    title = 'ID Player'
-                    }, function(data2, menu2)
-                         idplayer = tonumber(data2.value)
-                         	menu2.close()
-                            TriggerServerEvent('fly:checkid', idplayer)
-							-- realid = GetPlayerServerId(PlayerId(idplayer))
-							-- rname  = GetPlayerName(PlayerId(realid))
-                            menu.close()
-                            -- GivePanel()
-                        end, function(data, menu)
-                      menu.close()
-                end)
-            elseif action == 'type' then
-                TypeMenu()
-            elseif action == 'confirm' then
-                TriggerServerEvent('give:vip', realid, type, car, ped, money)
-                idplayer = 'N/A'
-                rname = 'N/A'
-                type = 'N/A'
-                realid = nil
-                car = nil
-                money = nil
-                ped = nil
-                menu.close()
-            elseif action == 'close' then
-                ESX.UI.Menu.CloseAll()
-            end
-        end, function(data, menu)
-            menu.close()
-            idplayer = 'N/A'
-            rname = 'N/A'
-            type = 'N/A'
-            realid = nil
-            car = nil
-            money = nil
-            ped = nil
-    end)
-end
 
-function RemoveVIP(player)
-    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'removepanel', {
-        title = 'VIP Admin Menu',
-        align = 'right',
-        elements = {
-            {label = 'Remove VIP', value = 'remove'},
-            {label = '<span style = color:red; span>Close</span>', value = 'close'}
-        }}, function(data, menu)
-            local action = data.current.value 
-            if action == 'remove' then
-                TriggerServerEvent("fly:removevip", player)
-                ESX.ShowNotification("You removed the VIP privilege of the player with identifier "..player)
-                menu.close()
-            elseif action == 'close' then
-                ESX.UI.Menu.CloseAll()
-            end
-        end, function(data, menu)
-            menu.close()
-    end)
-  
-end
 
-function TypeMenu()
-    local elements = {}
-    for k,v in pairs(Config.Vips) do
-        table.insert(elements, {label = "VIP: " .. v.Name .." | Cars:".. v.Cars .. "| Ped?: ".. v.Ped .. "| Money: "..v.Money,  value = v.Name, cars = v.Cars, peds = v.Ped, moneyy = v.Money })
-    end
-
-    ESX.UI.Menu.Open(
-        'default', GetCurrentResourceName(), 'vip_type',
-        {
-            title = "Type VIP",
-            align = "right",
-            elements = elements
-        },
-    function(data2, menu2)
-
-        local action = data2.current.value
-        if action then
-            type = action
-            car = data2.current.cars
-            ped = data2.current.peds
-            money = data2.current.moneyy
-            GivePanel() 
-        end
-        menu2.close()
-
-    end, function(data2, menu2)
-        menu2.close()
-    end)
-end
 
 function TypeMenuGenerate(typevip, idpjs)
     for k,v in pairs(Config.Vips) do
@@ -178,7 +70,7 @@ function TypeMenuGenerate(typevip, idpjs)
             TriggerServerEvent('code:generate', v.Name, v.Cars, v.Ped, v.Money)
             break
             else
-                TriggerServerEvent('give:vip', idpjs, v.Name, v.Cars, v.Ped, v.Money)   
+                TriggerServerEvent('fly:givevip', idpjs, v.Name, v.Cars, v.Ped, v.Money)   
                 break
             end  
         end
@@ -188,62 +80,28 @@ end
 
 RegisterNetEvent('fly:success')
 AddEventHandler('fly:success', function(vip, cars, peds, moneyx2)
-    local elements = {}
-    local id = GetPlayerServerId(PlayerId()) 
-        table.insert(elements, {label = 'Your VIP: '..vip, value = nil})
-        if cars ~= 0 then
-        table.insert(elements, {label = 'Choose my cars ['..cars..']', value = 'choosecar'})
-        end
-        if not useped then
-            table.insert(elements, {label = 'Use my ped ['..peds..']', value = 'ped'})
-        else 
-            table.insert(elements, {label = 'Restore Character', value = 'fixpj'})
-        end
-        if moneyx2 ~= 0 then
-        table.insert(elements, {label = 'Claim my money $'..moneyx2, value = 'claimmoney'})
-        end
-        
-
-        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'vipmenu', {
-            title = 'VIP Menu', 
-            align = 'right',
-            elements = elements
-
-        }, function(data, menu)
-            local val = data.current.value
-            if val == 'choosecar' then
-                Menutochoosevehicle(vip, cars)
-            elseif val == 'ped' then
-                useped = true
-                TriggerServerEvent('fly:checkped')
-                 menu.close()
-            elseif val == 'fixpj' then
-                useped = false
-                local hp = GetEntityHealth(PlayerPedId())
-                ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
-                    local isMale = skin.sex == 0
-                    TriggerEvent('skinchanger:loadDefaultModel', isMale, function()
-                        ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
-                            TriggerEvent('skinchanger:loadSkin', skin)
-                            TriggerEvent('esx:restoreLoadout')
-                            TriggerEvent('dpc:ApplyClothing')
-                            SetEntityHealth(PlayerPedId(), hp)
-                        end)
-                    end)
-                end)
-                menu.close()
-            elseif val == 'claimmoney' then
-                TriggerServerEvent('claim:money')
+    if not IsDead then
+        for k,v in pairs(Config.Cars) do
+            if vip == v.category then    
+        SetNuiFocus(true, true)
+        SendNUIMessage({
+            type = "open_vip",
+            vip = vip,
+            cars = cars, 
+            peds = peds, 
+            moneyx2 = moneyx2,
+            carmodel = v.model,
+            carslabel = v.label,
+            imagen = v.imagen
+        })
             end
-        end, function(data, menu)
-            menu.close()
-        end)
-
+        end
+    end
 end)
 
 RegisterNetEvent('fly:spawnped')
 AddEventHandler('fly:spawnped', function(ped)
-    if ped ~= 'notavailable' then
+    if ped ~= 'notavailable' or ped ~= '1' then
         local modelHash = GetHashKey(ped)
         SetPedDefaultComponentVariation(PlayerPedId())
         ESX.Streaming.RequestModel(modelHash, function()
@@ -254,58 +112,73 @@ AddEventHandler('fly:spawnped', function(ped)
             SetPedComponentVariation(PlayerPedId(), 8, 0, 0, 2)
         end)
     else
-        ESX.ShowNotification("Your vip is not entitled to a ped")
+        ESX.ShowNotification("Your vip is not entitled to a ped or you do not have one assigned")
     end
 end)
 
-function Menutochoosevehicle(vip, cars)
-    local elements = {}  
-    for k,v in pairs(Config.Cars) do
-        if vip == v.category then
-        table.insert(elements,{label = v.label, model = v.model, category = v.category})
-        end
-    end
-    ESX.UI.Menu.Open(
-        'default', GetCurrentResourceName(), 'vip_type',
-        {
-            title = "Choose your Car ["..cars.."]",
-            align = "right",
-            elements = elements
-        },
-    function(data2, menu2)
-
-        local action = data2.current.model
-        if action then
-            local coords    = GetEntityCoords(PlayerPedId())
-            ESX.Game.SpawnVehicle(action, coords, 0.0, function(vehicle) 
-                if DoesEntityExist(vehicle) then
-
-                    local vehicleprops = ESX.Game.GetVehicleProperties(vehicle)
-                    SetPedIntoVehicle(PlayerPedId(),vehicle,-1)
-                    TriggerServerEvent('fly:givecar', action, vehicleprops)	
-                end		
+RegisterNetEvent('fly:resetskin')
+AddEventHandler('fly:resetskin', function()
+    local hp = GetEntityHealth(PlayerPedId())
+    ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
+        local isMale = skin.sex == 0
+        TriggerEvent('skinchanger:loadDefaultModel', isMale, function()
+            ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+                TriggerEvent('skinchanger:loadSkin', skin)
+                TriggerEvent('esx:restoreLoadout')
+                TriggerEvent('dpc:ApplyClothing')
+                SetEntityHealth(PlayerPedId(), hp)
             end)
-            ESX.UI.Menu.CloseAll()
-        end
-        menu2.close()
-
-    end, function(data2, menu2)
-        menu2.close()
+        end)
     end)
-end
+end)
 
 
 RegisterNUICallback("action", function(data)
-    if data.action == "gencode" then
+    if  data.action == "showlist" then
+        TriggerServerEvent("fly:showlist")
+    elseif data.action == "gencode" then
         TypeMenuGenerate(data.tvip, 0)
     elseif data.action == "checkid" then
         TriggerServerEvent('fly:checkid', data.id)
     elseif data.action == "givevip" then
         TypeMenuGenerate(data.tvip2, tonumber(data.idp))
+    elseif data.action == "claimcar" then 
+        local coords    = GetEntityCoords(PlayerPedId())
+        ESX.Game.SpawnVehicle(data.carclaimed, coords, 0.0, function(vehicle) 
+            if DoesEntityExist(vehicle) then
+
+                local vehicleprops = ESX.Game.GetVehicleProperties(vehicle)
+                SetPedIntoVehicle(PlayerPedId(),vehicle,-1)
+                TriggerServerEvent('fly:givecar', data.carclaimed, vehicleprops)	
+            end		
+        end)
+    elseif data.action == "withdraw" then
+        TriggerServerEvent('claim:money', data.moneyw)
+    elseif data.action =="changeped" then
+        TriggerServerEvent('fly:setped', data.id, data.ped)
+    elseif data.action == "spawnped" then
+        TriggerEvent('fly:spawnped', data.playerped)
+    elseif data.action == "resetskin" then
+        TriggerEvent('fly:resetskin')
+    elseif data.action == "delvip" then
+        TriggerServerEvent("fly:delvip", data.idvip)
+    elseif data.action == "redeemvip" then
+        TriggerServerEvent('fly:redeem', data.code)
     end
 end)
 
 RegisterNUICallback("NUIFocusOff", function(data,cb) 
     SetNuiFocus(false, false)
     cb({})
+end)
+
+
+
+
+AddEventHandler('esx:onPlayerDeath', function(data)
+    IsDead = true
+end)
+
+AddEventHandler('playerSpawned', function(spawn)
+    IsDead = false
 end)
