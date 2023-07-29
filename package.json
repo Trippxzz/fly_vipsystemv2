@@ -1,0 +1,13 @@
+{
+  "name": "fly-vipbotv2",
+  "version": "1.9",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js"
+  },
+  "author": "tripp.",
+  "dependencies": {
+    "discord.js": "^13.16.0"
+  }
+}
