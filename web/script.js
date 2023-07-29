@@ -7,6 +7,7 @@ var quantmoney = 0;
 var moneyw = 0;
 var spawnped = false
 
+
 class TypeVips{
     constructor(name){
         this.name = name
@@ -100,7 +101,6 @@ function quit() {
     listVip.splice(0);
     listCars.splice(0);
     listTypeV.splice(0);
-    // listpVip.splice(0)
 }
 
 function back(){
@@ -131,6 +131,14 @@ window.addEventListener('message', (event) => {
             option.value = v.getName;
             option.text = v.getName;
             viplist.appendChild(option);
+          });
+          let viplist2 = document.getElementById("typevip2") 
+          viplist2.innerHTML = ""; 
+            listTypeV.forEach(v => {
+            let option = document.createElement("option");
+            option.value = v.getName;
+            option.text = v.getName;
+            viplist2.appendChild(option);
           });
     document.getElementById("list").style.display = "none"
     }else if(event.data.type == "show_list"){
@@ -241,9 +249,8 @@ function ClaimMoney(){
             action: "withdraw",
             moneyw: parseInt(moneyw)
         }));
-    }else{
-
     }
+    quit()
 }
 function ClaimCar(carclaimed){
     quit()
@@ -254,12 +261,6 @@ function ClaimCar(carclaimed){
     
 }
 
-// function ModPed(id){
-//     if (id.getPed != "notavailable"){
-//         id.getElementById("valped").disabled = false
-//         document.getElementById("btnconfirmped").innerHTML = " <button type='button' class='btn btn-success' onclick='ChangePed(\"" + id.getIdentifier+ id.getPed + "\")'>H</button>"
-//     }
-// }
 
 function ChangePed(id){
     const inputPed = document.getElementById("valped-" + id).value;
@@ -276,6 +277,7 @@ function redirect(){
 }
 
 function ShowList(){
+    listVip.splice(0);
     $.post('https://fly_vipsystemv2/action', JSON.stringify({
         action: "showlist"
     }));
@@ -283,7 +285,7 @@ function ShowList(){
 let refresh = function(id, code, ident, vip, car, ped, money){
     let vipL = new InfoVips(id, code, ident, vip, car, ped, money);
     listVip.push(vipL);
-    showList()
+    displayList()
 }
 
 let rPlayerStats = function(vip, car, ped, money){
@@ -319,7 +321,7 @@ let rPlayerStats = function(vip, car, ped, money){
 
 function SpawnPed(){
     btntext = document.getElementById("contpedbtn").textContent
-    if (spawnped === false && btntext == "Spawn"){
+    if (spawnped === false && btntext == "Spawn Ped"){
         spawnped = true
         document.getElementById("contpedbtn").innerHTML = "Reset Skin"
         $.post('https://fly_vipsystemv2/action', JSON.stringify({
@@ -352,9 +354,12 @@ function ChooseCars(){
     cards.innerHTML = (carsl)
 }
 
+function hideList(){
+    document.getElementById("list").style.display = 'none'
+    // listVip.splice(0);
+}
   
-let showList = function () {
-
+let displayList = function () {
     document.getElementById("list").style.display = 'block'
     let act = document.getElementsByClassName("table table-bordered")[0];
     list = "";
@@ -430,3 +435,21 @@ let showList = function () {
         }));
         quit()
     }
+
+let eyeicon = document.getElementById("eye");
+
+eyeicon.addEventListener("click", toggleIcon);
+
+function toggleIcon() {
+  if (eyeicon.classList.contains("bi-eye")) {
+    eyeicon.classList.remove("bi-eye");
+    eyeicon.classList.add("bi-eye-slash"); 
+    eyeicon.removeEventListener("click", hideList); 
+    eyeicon.addEventListener("click", ShowList()); 
+  } else {
+    eyeicon.classList.remove("bi-eye-slash");
+    eyeicon.classList.add("bi-eye");
+    eyeicon.removeEventListener("click", ShowList);
+    eyeicon.addEventListener("click", hideList()); 
+  }
+}
